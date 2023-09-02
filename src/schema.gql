@@ -3,8 +3,8 @@
 # ------------------------------------------------------
 
 input CreateUserInput {
-  Login: String!
-  Password: String!
+  email: String!
+  password: String!
 }
 
 type LoginResponse {
@@ -13,20 +13,20 @@ type LoginResponse {
 }
 
 input LoginUserInput {
-  Login: String!
-  Password: String!
+  email: String!
+  password: String!
 }
 
 type Mutation {
-  Login(LoginUserInput: LoginUserInput!): LoginResponse!
+  Register(createUserInput: CreateUserInput!): User!
+  login(loginUserInput: LoginUserInput!): LoginResponse!
 }
 
 type Query {
-  Auth(UserInput: CreateUserInput!): User!
+  root: String!
 }
 
 type User {
+  email: String!
   id: Int!
-  login: String!
-  name: String!
 }

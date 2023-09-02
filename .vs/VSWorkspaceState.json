@@ -1,0 +1,10 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\prisma",
+    "\\src",
+    "\\src\\auth"
+  ],
+  "SelectedNode": "\\src\\auth\\auth.resolver.ts",
+  "PreviewInSolutionExplorer": false
+}

@@ -7,8 +7,14 @@ import { CreateUserInput } from './dto/create-user.input';
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
-  @Query(() => User)
-  Auth(@Args('UserInput') userInput: CreateUserInput) {
-    return this.userService.findByLogin(userInput.Login);
+
+  @Mutation(() => User)
+  Register(@Args('createUserInput') input: CreateUserInput){
+    return this.userService.createUser(input)
+  }
+
+  @Query(()=> String)
+  root(){
+    return null
   }
 }
