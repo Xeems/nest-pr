@@ -1,7 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/user/entities/user.entity';
+import { LoginUserInput } from './dto/login-user.input';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +18,7 @@ export class AuthService {
       const { password, ...rest } = user
       return rest
     }
-    return new UnauthorizedException('validate user method');
+    return new BadRequestException('validate user method');
   }
 
   async login(user: User) {
@@ -28,6 +29,16 @@ export class AuthService {
       }),
       user
     }
+  }
+
+  async register(input: LoginUserInput){
+    const newUser = await this.userService.createUser(input)
+    
+    if(!newUser){
+      return new BadRequestException('user with this email alredy exsists')
+    }
+
+    return newUser
   }
 
 }

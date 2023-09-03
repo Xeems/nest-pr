@@ -5,6 +5,8 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { join } from 'path';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { PrismaModule } from './prisma/prisma.module';
 
 
 @Module({
@@ -16,8 +18,10 @@ import { AuthModule } from './auth/auth.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
     }),
+    ConfigModule.forRoot({ isGlobal: true }),
     UserModule,
-    AuthModule
+    AuthModule,
+    PrismaModule
   ],
   controllers: [],
   providers: [],
