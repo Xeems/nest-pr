@@ -2,16 +2,48 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
-model Users {
-  id          Int           @id @default(autoincrement())
-  email       String        @unique
-  password    String
+model User {
+    user_id   		Int     	@id @default(autoincrement())
+    user_name 		String
+    email    		String  	@unique
+    password 		String
+	groups			User_In_Group[]		
+}
+
+model User_In_Group {
+    user_group_id 	Int 		@id @default(autoincrement())
+	user			User		@relation(fields: [user_id],references: [user_id])
+	user_id			Int
+	group			Group		@relation(fields: [group_id], references: [group_id])
+	group_id		Int
+	role			Role
+}
+
+enum Role{
+	CREATOR
+	ADMIN
+	MEMBER
+}
+
+model Group {
+    group_id   		Int    		@id @default(autoincrement())
+	users			User_In_Group[]
+    groupName 		String
+	apis			Api[]
+}
+
+model Api{
+	api_id			Int			@id @default(autoincrement())
+	name			String
+	description		String
+	group			Group		@relation(fields: [group_id], references: [group_id])
+	group_id 		Int		
 }
