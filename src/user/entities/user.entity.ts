@@ -1,11 +1,14 @@
-import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
+import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { User_In_Group } from 'src/group/entities/userInGroup.entity';
 
 @ObjectType()
 export class User {
-  @Field(() => ID)
-  id: number;
+  @Field(() => Int)
+  user_id: number;
 
   @Field(() => String)
-  email: string;
+  github_id: string;
 
+  @Field(() => User_In_Group)
+  groups: User_In_Group[];
 }

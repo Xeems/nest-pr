@@ -1,24 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthResolver } from './auth.resolver';
 import { UserModule } from 'src/user/user.module';
-import { LocalStrategy } from './strategies/local.strategy';
+import { GithubStrategy } from './Strategy/github.startegy';
 import { PassportModule } from '@nestjs/passport';
-import { GqlAuthGuard } from './guard/gql-auth.guard';
-import { JwtModule } from '@nestjs/jwt/dist';
-import { JwtStrategy } from './strategies/jwt.strategy';
-import { JwtAuthGuard } from './guard/jwt-auth.guard';
+import { GitHubGuard } from 'src/guards/github.guard';
+import { AuthController } from './auth.controller';
 
 @Module({
-  imports:[
-    UserModule, 
-    PassportModule,
-    JwtModule.register({
-      signOptions:{expiresIn: '60s'},
-      secret: process.env.JWT_SECRET
-    })
-  ],
-  providers: [AuthResolver, AuthService, LocalStrategy, GqlAuthGuard, JwtAuthGuard, JwtStrategy],
-  exports: [AuthService]
+  providers: [AuthService, GitHubGuard, GithubStrategy ],
+  imports:[UserModule,  PassportModule.register({ defaultStrategy: 'github' })],
+  controllers: [AuthController]
 })
 export class AuthModule {}

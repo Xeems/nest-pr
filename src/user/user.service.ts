@@ -1,41 +1,36 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
-import { User } from './entities/user.entity'
+import {ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UserService {
+	constructor(private prisma: PrismaService) { }
 
-  constructor(readonly prismaClient: PrismaService){}
+	async newUser(github_id: string) {
+		const user = await this.prisma.user.findFirst({
+			where: {
+				github_id
+			},
+		})
 
-  async findByLogin(email: string) {
-    const user = await this.prismaClient.users.findUnique({
-      where: {
-        email
-      }
-    });
-    console.log(user)
-    return user;
-  }
+		if (user == null) {
+			const newUser = this.prisma.user.create({
+				data: {
+					github_id,
+					user_name: ''
+				}
+			})
+			return newUser;
+		}
+		else return new ConflictException("User alredy exists")
+	}
 
-  async createUser(input: {email: string, password: string}): Promise<User>{
-    const user = await this.prismaClient.users.findFirst({
-      where: {
-        email: input.email
-      }
-    })
+	async findOne(github_id: string) {
+		const user = await this.prisma.user.findFirst({
+			where: {
+				github_id
+			},
+		})
 
-    if (user) {
-      return null
-    }
-
-    const newUser = await this.prismaClient.users.create({
-      data: {
-        email: input.email,
-        password: input.password
-      }
-    });
-    return newUser;
-  }
-
+		return user ? user : this.newUser(github_id)
+	}
 }

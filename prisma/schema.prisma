@@ -12,9 +12,8 @@ datasource db {
 
 model User {
     user_id   		Int     	@id @default(autoincrement())
-    user_name 		String
-    email    		String  	@unique
-    password 		String
+	github_id		String		@unique
+    user_name 		String?
 	groups			User_In_Group[]		
 }
 
@@ -36,13 +35,13 @@ enum Role{
 model Group {
     group_id   		Int    		@id @default(autoincrement())
 	users			User_In_Group[]
-    groupName 		String
+    group_name 		String
 	apis			Api[]
 }
 
 model Api{
 	api_id			Int			@id @default(autoincrement())
-	name			String
+	api_name		String
 	description		String
 	group			Group		@relation(fields: [group_id], references: [group_id])
 	group_id 		Int		

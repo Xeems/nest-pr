@@ -6,8 +6,15 @@ import { User } from './entities/user.entity';
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Query(()=> String)
-  root(){
-    return null
+  @Mutation(() => User)
+  createUser(@Args('github_id', { type: () => String }) github_id: string) {
+    return this.userService.newUser(github_id);
   }
+
+  @Query(() => User)
+  findOne(@Args('github_id', { type: () => String }) github_id: string) {
+    return this.userService.findOne(github_id);
+  }
+
+
 }

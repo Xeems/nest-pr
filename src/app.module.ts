@@ -3,10 +3,14 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { join } from 'path';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
+import { UserModule } from './user/user.module';
+import { GroupModule } from './group/group.module';
+import { ApiModule } from './api/api.module';
+import { AuthModule } from './auth/auth.module';
+import { PassportModule } from '@nestjs/passport';
+import { GithubStrategy } from './auth/Strategy/github.startegy';
 
 
 @Module({
@@ -19,11 +23,15 @@ import { PrismaModule } from './prisma/prisma.module';
       sortSchema: true,
     }),
     ConfigModule.forRoot({ isGlobal: true }),
+    PrismaModule,
     UserModule,
+    UserModule,
+    GroupModule,
+    ApiModule,
     AuthModule,
-    PrismaModule
+    PassportModule.register({ defaultStrategy: 'github' }),
   ],
   controllers: [],
-  providers: [],
+  providers: [GithubStrategy],
 })
 export class AppModule { }

@@ -2,26 +2,67 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type LoginResponse {
-  acces_token: String!
-  user: User!
+type Api {
+  api_id: Int!
+  api_name: String!
+  description: String!
+  group: Group!
 }
 
-input LoginUserInput {
-  email: String!
-  password: String!
+input CreateApiInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreateGroupInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Group {
+  apis: Api!
+  group_id: Int!
+  group_name: String!
+  users: User!
 }
 
 type Mutation {
-  login(loginUserInput: LoginUserInput!): LoginResponse!
-  signUp(signUpUserInput: LoginUserInput!): User!
+  createApi(createApiInput: CreateApiInput!): Api!
+  createGroup(createGroupInput: CreateGroupInput!): Group!
+  createUser(github_id: String!): User!
+  removeApi(id: Int!): Api!
+  removeGroup(id: Int!): Group!
+  updateApi(updateApiInput: UpdateApiInput!): Api!
+  updateGroup(updateGroupInput: UpdateGroupInput!): Group!
 }
 
 type Query {
-  root: String!
+  api(id: Int!): Api!
+  findOne(github_id: String!): User!
+  group(id: Int!): Group!
+}
+
+input UpdateApiInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdateGroupInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
 
 type User {
-  email: String!
-  id: ID!
+  github_id: String!
+  groups: User_In_Group!
+  user_id: Int!
+}
+
+type User_In_Group {
+  group: Group!
+  role: String!
+  user: User!
+  user_in_group_id: Int!
 }
