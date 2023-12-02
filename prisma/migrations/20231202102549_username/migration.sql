@@ -5,4 +5,5 @@
 
 */
 -- AlterTable
-ALTER TABLE "User" DROP COLUMN "user_name";
+ALTER TABLE "User" DROP COLUMN "user_name",
+ADD COLUMN     "username" TEXT;

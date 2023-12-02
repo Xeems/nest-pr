@@ -19,6 +19,12 @@ input CreateGroupInput {
   exampleField: Int!
 }
 
+input CreateUserDto {
+  login: String!
+  password: String!
+  username: String!
+}
+
 type Group {
   apis: Api!
   group_id: Int!
@@ -29,7 +35,7 @@ type Group {
 type Mutation {
   createApi(createApiInput: CreateApiInput!): Api!
   createGroup(createGroupInput: CreateGroupInput!): Group!
-  createUser(github_id: String!): User!
+  createUser(CreateUserInput: CreateUserDto!): User!
   removeApi(id: Int!): Api!
   removeGroup(id: Int!): Group!
   updateApi(updateApiInput: UpdateApiInput!): Api!
@@ -38,7 +44,7 @@ type Mutation {
 
 type Query {
   api(id: Int!): Api!
-  findOne(github_id: String!): User!
+  findUserByLogin(login: String!): User!
   group(id: Int!): Group!
 }
 
@@ -55,9 +61,11 @@ input UpdateGroupInput {
 }
 
 type User {
-  github_id: String!
   groups: User_In_Group!
+  login: String!
+  password: String!
   user_id: Int!
+  username: String!
 }
 
 type User_In_Group {

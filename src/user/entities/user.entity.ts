@@ -7,8 +7,14 @@ export class User {
   user_id: number;
 
   @Field(() => String)
-  github_id: string;
+  username: string;
+
+  @Field(() => String)
+  login: string;
+
+  @Field(() => String)
+  password: string;
 
   @Field(() => User_In_Group)
-  groups: User_In_Group[];
+  groups?: User_In_Group[];
 }

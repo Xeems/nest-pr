@@ -14,14 +14,7 @@ import { GithubStrategy } from './auth/Strategy/github.startegy';
 
 
 @Module({
-  imports: [
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      playground: false,
-      plugins: [ApolloServerPluginLandingPageLocalDefault()],
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      sortSchema: true,
-    }),
+  imports: [   
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
     UserModule,
@@ -30,6 +23,13 @@ import { GithubStrategy } from './auth/Strategy/github.startegy';
     ApiModule,
     AuthModule,
     PassportModule.register({ defaultStrategy: 'github' }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      playground: false,
+      plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      sortSchema: true,
+    }),
   ],
   controllers: [],
   providers: [GithubStrategy],

@@ -1,36 +1,41 @@
-import {ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
 	constructor(private prisma: PrismaService) { }
 
-	async newUser(github_id: string) {
-		const user = await this.prisma.user.findFirst({
-			where: {
-				github_id
-			},
-		})
-
-		if (user == null) {
-			const newUser = this.prisma.user.create({
-				data: {
-					github_id,
-					user_name: ''
-				}
-			})
-			return newUser;
+	async newUser(username: string, login: string, password: string): Promise<User> {
+		try {
+			const user = await this.findByLogin(login)
+			if (!user) {
+				const newUser = await this.prisma.user.create({
+					data: {
+						login: login,
+						username: username,
+						password: password
+					}
+				})
+				return newUser
+			}
 		}
-		else return new ConflictException("User alredy exists")
+		catch (error) {
+			console.log(error)
+		}
 	}
 
-	async findOne(github_id: string) {
-		const user = await this.prisma.user.findFirst({
-			where: {
-				github_id
-			},
-		})
-
-		return user ? user : this.newUser(github_id)
+	async findByLogin(login: string): Promise<User> {
+		try {
+			const user = await this.prisma.user.findFirst({
+				where: {
+					login
+				}
+			})
+			return user
+		}
+		catch (error) {
+			console.log(error)
+		}
 	}
 }

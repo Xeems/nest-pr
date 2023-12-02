@@ -1,48 +1,46 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    user_id   		Int     	@id @default(autoincrement())
-	github_id		String		@unique
-    user_name 		String?
-	groups			User_In_Group[]		
+  user_id   Int             @id @default(autoincrement())
+  username  String?
+  login     String          @unique()
+  password  String
+  groups    User_In_Group[]
 }
 
 model User_In_Group {
-    user_group_id 	Int 		@id @default(autoincrement())
-	user			User		@relation(fields: [user_id],references: [user_id])
-	user_id			Int
-	group			Group		@relation(fields: [group_id], references: [group_id])
-	group_id		Int
-	role			Role
-}
-
-enum Role{
-	CREATOR
-	ADMIN
-	MEMBER
+  user_group_id Int   @id @default(autoincrement())
+  user_id       Int
+  group_id      Int
+  role          Role
+  group         Group @relation(fields: [group_id], references: [group_id])
+  user          User  @relation(fields: [user_id], references: [user_id])
 }
 
 model Group {
-    group_id   		Int    		@id @default(autoincrement())
-	users			User_In_Group[]
-    group_name 		String
-	apis			Api[]
+  group_id   Int             @id @default(autoincrement())
+  group_name String
+  apis       Api[]
+  users      User_In_Group[]
 }
 
-model Api{
-	api_id			Int			@id @default(autoincrement())
-	api_name		String
-	description		String
-	group			Group		@relation(fields: [group_id], references: [group_id])
-	group_id 		Int		
+model Api {
+  api_id      Int    @id @default(autoincrement())
+  description String
+  group_id    Int
+  api_name    String
+  group       Group  @relation(fields: [group_id], references: [group_id])
+}
+
+enum Role {
+  CREATOR
+  ADMIN
+  MEMBER
 }
